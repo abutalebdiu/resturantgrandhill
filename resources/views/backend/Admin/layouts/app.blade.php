@@ -16,8 +16,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css" />
     <link href="{{ asset('backend') }}/assets/plugins/summernote/dist/summernote.css" rel="stylesheet" />
-    <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://bengalvibes.com/backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
     @stack('css')
 
@@ -25,7 +28,7 @@
 
 </head>
 
- <body>
+<body>
     <div id="page-loader" class="fade show"> <span class="spinner"></span> </div>
     <div id="page-container" class="page-container fade page-sidebar-fixed page-header-fixed">
         <div id="header" class="header navbar-default">
@@ -33,15 +36,15 @@
                 <button type="button" class="navbar-toggle" data-click="sidebar-toggled"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
             </div>
             <ul class="navbar-nav navbar-right">
-                <li> <a href="{{ route('homepage') }}" target="_blank"> Go Website </a>  </li>
+                <li> <a href="{{ route('homepage') }}" target="_blank"> Go Website </a> </li>
 
 
                 <li class="dropdown navbar-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         @if(Auth::user()->image)
-                            <img src="{{ asset(Auth::user()->image) }}" alt="">
+                        <img src="{{ asset(Auth::user()->image) }}" alt="">
                         @else
-                            <img src="{{  asset('backend/assets/img/user/user-13.jpg')}}" alt="" />
+                        <img src="{{  asset('backend/assets/img/user/user-13.jpg')}}" alt="" />
                         @endif
                         <span class="d-none d-md-inline">{{ Auth::user()->username }}</span>
                         <b class="caret"></b>
@@ -51,8 +54,7 @@
                         <a href="{{ route('admin.user.setting') }}" class="dropdown-item"><i class="fa fa-cogs"></i> Setting</a>
 
 
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
                             <i class="fa fa-sign-out"></i> {{ __('Logout') }}
                         </a>
@@ -76,11 +78,11 @@
                             <div class="cover with-shadow"></div>
                             <div class="image">
 
-                            @if(Auth::user()->image)
-                            <img src="{{ asset(Auth::user()->image) }}" alt="">
-                            @else
-                            <img src="{{  asset('backend/assets/img/user/user-13.jpg')}}" alt="" />
-                            @endif
+                                @if(Auth::user()->image)
+                                <img src="{{ asset(Auth::user()->image) }}" alt="">
+                                @else
+                                <img src="{{  asset('backend/assets/img/user/user-13.jpg')}}" alt="" />
+                                @endif
 
                             </div>
                             <div class="info"> {{ Auth::user()->name }} <small>Admin</small> </div>
@@ -91,46 +93,55 @@
                 <ul class="nav">
                     <li class="nav-header">Navigation</li>
                     <li>
-                        <a href="{{ route('admin.dashboard') }}">  <i class="fa fa-th-large"></i> <span>Dashboard</span> </a>
+                        <a href="{{ route('admin.dashboard') }}"> <i class="fa fa-th-large"></i> <span>Dashboard</span> </a>
                     </li>
                     <li class="nav-header">Admin</li>
 
 
                     <li>
-                        <a href="{{ route('admin.booking.index') }}">   <i class="fa fa-shopping-cart"></i><span>Booking Management</span> </a>
+                        <a href="{{ route('admin.booking.index') }}"> <i class="fa fa-shopping-cart"></i><span>Booking Management</span> </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('admin.room.index') }}">   <i class="fa fa-shopping-cart"></i><span>Room Menagement</span> </a>
+                        <a href="{{ route('admin.room.index') }}"> <i class="fa fa-shopping-cart"></i><span>Room Menagement</span> </a>
                     </li>
 
 
                     <li>
-                        <a href="{{ route('admin.food-category.index') }}">   <i class="fa fa-shopping-cart"></i><span>Food Category</span> </a>
+                        <a href="{{ route('admin.food-category.index') }}"> <i class="fa fa-shopping-cart"></i><span>Food Category</span> </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('admin.food.index') }}">   <i class="fa fa-shopping-cart"></i><span>Food</span> </a>
+                        <a href="{{ route('admin.food.index') }}"> <i class="fa fa-shopping-cart"></i><span>Food</span> </a>
+                    </li>
+
+                    <li class="has-sub">
+                        <a href="javascript:;"> <b class="caret"></b> <i class="fa fa-cogs"></i> <span> Food Order </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="{{ route('admin.foodorder.index') }}"> Food Order List <i class="fa fa-cogs text-theme"></i> </a></li>
+                            <li><a href="{{ route('admin.foodorder.create') }}"> Add Food Order <i class="fa fa-cogs text-theme"></i> </a></li>
+                        </ul>
                     </li>
 
                     <li>
-                        <a href="{{ route('admin.category.index') }}">   <i class="fa fa-shopping-cart"></i><span>Category Menagement</span> </a>
+                        <a href="{{ route('admin.category.index') }}"> <i class="fa fa-shopping-cart"></i><span>Category Menagement</span> </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.roomfloors.index') }}">   <i class="fa fa-shopping-cart"></i><span>Room Floor Menagement</span> </a>
+                        <a href="{{ route('admin.roomfloors.index') }}"> <i class="fa fa-shopping-cart"></i><span>Room Floor Menagement</span> </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.booking.index') }}">   <i class="fa fa-shopping-cart"></i><span>Room Booking</span> </a>
+                        <a href="{{ route('admin.booking.index') }}"> <i class="fa fa-shopping-cart"></i><span>Room Booking</span> </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.gallery.index') }}">   <i class="fa fa-shopping-cart"></i><span>Gallery</span> </a>
+                        <a href="{{ route('admin.gallery.index') }}"> <i class="fa fa-shopping-cart"></i><span>Gallery</span> </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.contact.index') }}">   <i class="fa fa-shopping-cart"></i><span>Contact</span> </a>
+                        <a href="{{ route('admin.contact.index') }}"> <i class="fa fa-shopping-cart"></i><span>Contact</span> </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('admin.admin') }}">    <i class="fa fa-list text-theme"></i><span>Users Management</span> </a>
+                        <a href="{{ route('admin.admin') }}"> <i class="fa fa-list text-theme"></i><span>Users Management</span> </a>
                     </li>
 
 
@@ -143,8 +154,8 @@
                         <a href="javascript:;"> <b class="caret"></b> <i class="fa fa-cogs"></i> <span> Accounts </span>
                         </a>
                         <ul class="sub-menu">
-                            <li><a href="{{ route('admin.expenses.index') }}">  Expense <i class="fa fa-cogs text-theme"></i> </a></li>
-                            <li><a href="{{ route('admin.funds_withdraws.index') }}">  Fund Withdraw <i class="fa fa-cogs text-theme"></i> </a></li>
+                            <li><a href="{{ route('admin.expenses.index') }}"> Expense <i class="fa fa-cogs text-theme"></i> </a></li>
+                            <li><a href="{{ route('admin.funds_withdraws.index') }}"> Fund Withdraw <i class="fa fa-cogs text-theme"></i> </a></li>
                         </ul>
                     </li>
 
@@ -166,16 +177,17 @@
                         <ul class="sub-menu">
 
 
-                            <li><a href="{{ route('admin.website.setting.index') }}">  Web Setting <i class="fa fa-cogs text-theme"></i> </a></li>
+                            <li><a href="{{ route('admin.website.setting.index') }}"> Web Setting <i class="fa fa-cogs text-theme"></i> </a></li>
                             <li><a href="{{ route('admin.slider.index') }}"> Slider <i class="fa fa-cogs text-theme"></i> </a></li>
 
-                            {{-- <li><a href="{{ route('admin-blog.index') }}">  Blogs <i class="fa fa-cogs text-theme"></i> </a></li>
-                            <li><a href="{{ route('blog-category.index') }}">  Blogs Category <i class="fa fa-cogs text-theme"></i> </a></li> --}}
-
-                        </ul>
+                            {{-- <li><a href="{{ route('admin-blog.index') }}"> Blogs <i class="fa fa-cogs text-theme"></i> </a>
                     </li>
+                    <li><a href="{{ route('blog-category.index') }}"> Blogs Category <i class="fa fa-cogs text-theme"></i> </a></li> --}}
 
-                    <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+                </ul>
+                </li>
+
+                <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
                 </ul>
             </div>
         </div>
@@ -184,7 +196,7 @@
 
         @yield('content')
 
-   </div> {{-- main div close --}}
+    </div> {{-- main div close --}}
 
     <script src="{{ asset('backend') }}/assets/js/app.min.js" type="text/javascript"></script>
 
@@ -201,15 +213,17 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     {!! Notify::message() !!}
 
     {{-- notify any errors --}}
     @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                toastr.error(`{!! $error !!}`)
-            </script>
-        @endforeach
+    @foreach ($errors->all() as $error)
+    <script>
+        toastr.error(`{!! $error !!}`)
+    </script>
+    @endforeach
     @endif
 
     <script>
@@ -218,103 +232,97 @@
                 'X-CSRF-TOKEN': `{{ csrf_token() }}`,
             }
         });
-
     </script>
 
     <script>
-            @if(Session::has('message'))
+        @if(Session::has('message'))
 
-            var type = "{{Session::get('alert-type','info')}}"
+        var type = "{{Session::get('alert-type','info')}}"
 
-            switch (type) {
-                case 'info':
-                    toastr.info("{{ Session::get('message') }}");
-                    break;
-                case 'success':
-                    toastr.success("{{ Session::get('message') }}");
-                    break;
-                case 'warning':
-                    toastr.warning("{{ Session::get('message') }}");
-                    break;
-                case 'error':
-                    toastr.error("{{ Session::get('message') }}");
-                    break;
-            }
-    @endif
+        switch (type) {
+            case 'info':
+                toastr.info("{{ Session::get('message') }}");
+                break;
+            case 'success':
+                toastr.success("{{ Session::get('message') }}");
+                break;
+            case 'warning':
+                toastr.warning("{{ Session::get('message') }}");
+                break;
+            case 'error':
+                toastr.error("{{ Session::get('message') }}");
+                break;
+        }
+        @endif
 
-    $(document).ready(function() {
-      $('.summernote').summernote(
+        $(document).ready(function() {
+            $('.summernote').summernote(
 
-            {
-              height: 200,
-              focus: true
-            }
+                {
+                    height: 200,
+                    focus: true
+                }
 
-        );
-    });
-
-
- </script>
+            );
+        });
+    </script>
 
 
-<script>
-    $(document).on('click', '#delete', function(e) {
-        e.preventDefault();
-        var link = $(this).attr("href");
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Delete this data!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                window.location.href = link;
-                Swal.fire(
-                    'Deleted!',
-                    'Data has been deleted.',
-                    'success'
-                )
-            }
-        })
-    });
-
-</script>
-
-
-<script>
-    $(document).on('click', '#approved', function(e) {
-        e.preventDefault();
-        var link = $(this).attr("href");
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Approved this Student!",
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Comfirm it!'
-        }).then((result) => {
-            if (result.value) {
-                window.location.href = link;
-                Swal.fire(
-                    'Approved!',
-                    'Student has been Approved.',
-                    'success'
-                )
-            }
-        })
-    });
+    <script>
+        $(document).on('click', '#delete', function(e) {
+            e.preventDefault();
+            var link = $(this).attr("href");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Delete this data!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = link;
+                    Swal.fire(
+                        'Deleted!',
+                        'Data has been deleted.',
+                        'success'
+                    )
+                }
+            })
+        });
+    </script>
 
 
+    <script>
+        $(document).on('click', '#approved', function(e) {
+            e.preventDefault();
+            var link = $(this).attr("href");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Approved this Student!",
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Comfirm it!'
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = link;
+                    Swal.fire(
+                        'Approved!',
+                        'Student has been Approved.',
+                        'success'
+                    )
+                }
+            })
+        });
+    </script>
 
-</script>
-
-@yield('customjs')
-@stack('js')
+    @yield('customjs')
+    @stack('js')
 
 
 </body>
+
 </html>

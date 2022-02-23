@@ -20,7 +20,7 @@ class FoodController extends Controller
         return view('backend.Admin.food.index',$data);
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
