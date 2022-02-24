@@ -113,7 +113,11 @@ class FoodOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('backend.Admin.foodorder.edit', [
+            'foods' => Food::all(),
+            'categories' => FoodCategory::all(),
+            'order' => FoodOrder::find($id),
+        ]);
     }
 
     /**
@@ -134,10 +138,10 @@ class FoodOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FoodOrder $order)
+    public function destroy($id)
     {
-        $order->delete();
-        return redirect()->route('admin.food-orderindex');
+        FoodOrder::find($id)->delete();
+        return redirect()->route('admin.foodorder.index');
         $notification = array(
             'message' => 'Food Order Added Successfully!',
             'alert-type' => 'success'

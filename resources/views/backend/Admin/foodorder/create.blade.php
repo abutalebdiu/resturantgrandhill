@@ -1,6 +1,13 @@
 @extends('backend.Admin.layouts.app')
 @section('title','Create Food Order')
 @section('content')
+@push('css')
+<style>
+    .list-group .active {
+        background-color: #4A1D8C;
+    }
+</style>
+@endpush
 <div id="content" class="content">
     <div class="panel panel-inverse">
         <div class="panel-heading">
@@ -26,12 +33,19 @@
                             <div class="col-4">
                                 <div class="list-group" id="list-tab" role="tablist">
                                     <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">All</a>
+                                    @php
+                                    $ids = '';
+                                    @endphp
                                     @foreach($categories as $item)
-                                    <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">{{$item->name}}</a>
+                                    @php
+                                    $ids = $ids.','.$item->id;
+                                    @endphp
+                                    <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list" href="#i{{$item->id}}" role="tab" aria-controls="home">{{$item->name}}</a>
                                     @endforeach
                                 </div>
                             </div>
                             <div class="col-8">
+
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
                                         <div class="row">
@@ -77,7 +91,7 @@
                                                                 </table>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" id="addToCart" class="btn btn-primary">Add To Cart</button>
+                                                                <button type="button" id="addToCart" class="btn btn-primary addToCart">Add To Cart</button>
                                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                                                             </div>
@@ -89,6 +103,68 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    @php
+                                    $datas = explode(',', $ids);
+                                    $datas = array_slice($datas, 1);
+                                    @endphp
+                                    @foreach($datas as $data)
+                                    <div class="tab-pane fade show" id="i{{$data}}" role="tabpanel" aria-labelledby="list-home-list">
+                                        <div class="row">
+                                            @foreach(App\Models\Food::foodByCatId($data) as $food)
+                                            <div class="col-4">
+                                                <div class="card" data-toggle="modal" data-target="#a{{$food->id}}{{$loop->index}}">
+                                                    <img height="70px" src="{{asset(''.$food->image)}}" class="card-img-top" alt="...">
+                                                    <div class="card-body p-1">
+                                                        <p style="font-size:12px" class="card-title text-center">{{$food->name}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="a{{$food->id}}{{$loop->index}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form>
+                                                            <input type="hidden" name="_token" id="carttoken" value="{{ Session::token() }}" />
+                                                            <input type="hidden" id="foodid" value="{{ $food->id}}">
+                                                            <div class="modal-body">
+                                                                <table class="table table-bordered">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Item Information</th>
+                                                                            <th width="30%">Qty</th>
+                                                                            <th>Price</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>{{$food->name}}</td>
+                                                                            <td><input type="number" id="qty" class="form-control" value="1"></td>
+                                                                            <td>{{$food->price}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" id="addToCart" class="btn btn-primary addToCart">Add To Cart</button>
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -196,7 +272,7 @@
 @push('js')
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#addToCart').click(function() {
+        $('.addToCart').click(function() {
             console.log('ajdsl');
             var carttoken = $("#carttoken").val();
             var qty = $("#qty").val();
@@ -210,7 +286,7 @@
                     _token: carttoken,
                 },
                 success: function(res) {
-                    alert(res);
+                    location.reload();
                 }
             })
         });

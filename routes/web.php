@@ -99,7 +99,7 @@ Route::group(['namespace' => 'Frontend'], function () {
 
 /*Start for Backend Admin*/
 
-Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+Route::group(['namespace' => 'Admin'], function () {
 
     Route::get('admin-dashboard', 'DashboardController@index')->name('admin.dashboard');
     Route::resource('admin-blog', 'BlogController');

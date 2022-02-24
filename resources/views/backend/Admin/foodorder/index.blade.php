@@ -39,14 +39,14 @@
                          <td>{{ $order->customer_name }}</td>
                          <td>{{ $order->mobile }}</td>
                          <td>{{ $order->table_no }}</td>
-                         <td>{{ $order->subtotal }}</td>
+                         <td>{{ $order->sub_total }}</td>
                          <td>{{ $order->service_charge }}</td>
                          <td>{{ $order->vat }}</td>
                          <td>{{ $order->total }}</td>
                          <td>{{$order->status == 1 ? 'prending' : 'Compleated'}}</td>
                          <td><a class="btn btn-primary btn-sm" href="{{ route('admin.foodorder.edit',$order->id) }}">Edit</a>
 
-                             <form action="{{ route('admin.food.destroy',$order->id) }}" method="post" style="display:inline-block;">
+                             <form action="{{ route('admin.foodorder.destroy',$order->id) }}" method="post" style="display:inline-block;">
                                  @csrf
                                  @method('delete')
                                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
