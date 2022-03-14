@@ -3,15 +3,51 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Food;
+use App\Models\User;
 use App\Models\FoodOrder;
+use Illuminate\Support\Str;
 use App\Models\FoodCategory;
 use Illuminate\Http\Request;
 use App\Models\FoodOrderItem;
+use App\Models\LedgerStatement;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class FoodOrderController extends Controller
 {
+    public function payfoodbill($id)
+    {
+        return view('backend.admin.foodorder.payfoodbill', [
+            'order' => FoodOrder::find($id),
+        ]);
+    }
+    public function foodbillstore(Request $request, $id)
+    {
+        $order = FoodOrder::find($id);
+
+        $ledgerstatement = LedgerStatement::latest()->first('amount');
+        $amount = $ledgerstatement->amount + $order->total;
+        $credit = $order->total;
+        $remarks = "food";
+        $mobile = $request->get('mobile');
+        $payment_mode = $request->get('payment_method');
+        LedgerStatement::create([
+            'amount' => $amount,
+            'credit' => $credit,
+            'remarks' => $remarks,
+            'mobile' => $mobile,
+            'payment_mode' => $payment_mode,
+        ]);
+        $order->update([
+            'payment_status' => 'paid',
+        ]);
+        $notification = array(
+            'message' => 'Payment Done!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('admin.foodorder.index')->with($notification);
+    }
     /** 
      * Display a listing of the resource.
      *
@@ -29,11 +65,23 @@ class FoodOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function addUser(Request $request)
+    {
+        User::create([
+            'name' => $request['name'],
+            'username' => Str::lower($request['name']),
+            'email' => $request['email'],
+            'password' => Hash::make(12345678),
+            'role_id' => 5,
+        ]);
+        return back();
+    }
     public function create()
     {
         return view('backend.Admin.foodorder.create', [
             'foods' => Food::all(),
             'categories' => FoodCategory::all(),
+            'users' => User::where('role_id', 5)->get(),
         ]);
     }
     public function addCart(Request $request)
@@ -58,7 +106,14 @@ class FoodOrderController extends Controller
         Cart::update($id, $cart->qty - 1);
         return back();
     }
-
+    public function invoive($id)
+    {
+        return view('backend.Admin.foodorder.invoice', [
+            'foods' => Food::all(),
+            'categories' => FoodCategory::all(),
+            'order' => FoodOrder::find($id),
+        ]);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -68,9 +123,10 @@ class FoodOrderController extends Controller
     public function store(Request $request)
     {
         $order = FoodOrder::create([
-            'customer_name' => $request->get('customer_name'),
-            'mobile' => $request->get('mobile'),
-            'address' => $request->get('address'),
+            'user_id' => $request->get('user_id'),
+            // 'customer_name' => $request->get('customer_name'),
+            // 'mobile' => $request->get('mobile'),
+            // 'address' => $request->get('address'),
             'table_no' => $request->get('table_no'),
             'sub_total' => Cart::subTotal(),
             'service_charge' => $request->get('service_charge'),
@@ -87,11 +143,7 @@ class FoodOrderController extends Controller
             ]);
         }
         Cart::destroy();
-        return redirect()->route('admin.foodorder.index');
-        $notification = array(
-            'message' => 'Food Order Added Successfully!',
-            'alert-type' => 'success'
-        );
+        return redirect()->route('admin.payfoodbill', $order->id);
     }
 
     /**
@@ -102,7 +154,11 @@ class FoodOrderController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('backend.Admin.foodorder.show', [
+            'foods' => Food::all(),
+            'categories' => FoodCategory::all(),
+            'order' => FoodOrder::find($id),
+        ]);
     }
 
     /**
@@ -113,11 +169,6 @@ class FoodOrderController extends Controller
      */
     public function edit($id)
     {
-        return view('backend.Admin.foodorder.edit', [
-            'foods' => Food::all(),
-            'categories' => FoodCategory::all(),
-            'order' => FoodOrder::find($id),
-        ]);
     }
 
     /**
@@ -141,10 +192,10 @@ class FoodOrderController extends Controller
     public function destroy($id)
     {
         FoodOrder::find($id)->delete();
-        return redirect()->route('admin.foodorder.index');
         $notification = array(
             'message' => 'Food Order Added Successfully!',
             'alert-type' => 'success'
         );
+        return redirect()->route('admin.foodorder.index')->with($notification);
     }
 }

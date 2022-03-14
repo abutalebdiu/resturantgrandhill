@@ -20,6 +20,7 @@ class Food extends Model
         'price',
         'image',
         'status',
+        'vat',
     ];
     public static function foodByCatId($id)
     {

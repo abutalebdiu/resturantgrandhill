@@ -11,6 +11,10 @@ class FoodOrder extends Model
     protected $guarded = [];
     public function items()
     {
-        return $this->hasMany(FoodOrderItem::class, 'food_id');
+        return $this->hasMany(FoodOrderItem::class, 'order_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

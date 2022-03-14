@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Cart;
 use App\Models\Billing;
 use App\Models\Booking;
+use Carbon\CarbonPeriod;
+use App\Models\FoodOrder;
 use App\Models\RoomFloor;
 use Illuminate\Http\Request;
 use App\Models\BookingDetail;
@@ -12,7 +14,6 @@ use App\Models\PaymentHistory;
 use Illuminate\Support\Carbon;
 use App\Models\LedgerStatement;
 use App\Http\Controllers\Controller;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Cookie;
 
 class BookingController extends Controller
@@ -22,6 +23,16 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function finalInvoice($id)
+    {
+        $booking = Booking::where('user_id', $id)->first();
+        $foodorder = FoodOrder::where('user_id', $id)->first();
+        $totalammount = $booking->after_discount + $foodorder->total;
+        $paid_amount = $totalammount - $booking->paid_amount;
+        $due_amount = $totalammount - $paid_amount;
+
+        return view('backend.Admin.booking.invoice', compact('booking', 'totalammount', 'paid_amount', 'foodorder', 'due_amount'));
+    }
     public function index(Request $request)
     {
 
@@ -37,33 +48,24 @@ class BookingController extends Controller
 
             $checkin = Carbon::create(request()->checkin);
             $checkout = Carbon::create(request()->checkout);
-<<<<<<< HEAD
             $gen_dates = CarbonPeriod::create($checkin, $checkout);
-            $gen_dates = collect($gen_dates)->map(function($date) {
+            $gen_dates = collect($gen_dates)->map(function ($date) {
                 return $date->format('Y-m-d');
             })->toArray();
 
             $dates = array_pop($gen_dates);
-=======
 
-            $dates = CarbonPeriod::create($checkin, $checkout);
-
-            $dates = collect($dates)->map(function($date) {
-                return $date->format('Y-m-d');
-            })->toArray();
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
-
-            $data['roomfloors'] = RoomFloor::with('rooms.bookings')->get()->map(function ($floor) use($dates) {
+            $data['roomfloors'] = RoomFloor::with('rooms.bookings')->get()->map(function ($floor) use ($dates) {
                 // Check every rooms if that available for booking
-                $floor->rooms->map(function ($room) use($dates) {
+                $floor->rooms->map(function ($room) use ($dates) {
 
                     // check this room if available
                     $count1 = $room->bookings
-                                ->whereIn('checkin', $dates)
-                                ->count();
+                        ->whereIn('checkin', $dates)
+                        ->count();
                     $count2 = $room->bookings
-                                ->whereIn('checkout', $dates)
-                                ->count();
+                        ->whereIn('checkout', $dates)
+                        ->count();
 
                     $room->not_available = (bool) ($count1 + $count2);
 
@@ -74,18 +76,12 @@ class BookingController extends Controller
                     return $room;
                 });
                 return $floor;
-
-
             });
         } else {
             $data['roomfloors'] = RoomFloor::all();
         }
 
-<<<<<<< HEAD
         $data['bookings'] = Booking::where('status', 'pending')->where('checkout', '>=', Carbon::today()->format('Y-m-d'))->latest()->get();
-=======
-        $data['bookings'] = Booking::where('status', 'pending')->where('checkin', '>=', Carbon::today()->format('Y-m-d'))->latest()->get();
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
 
         return view('backend.Admin.booking.index', $data);
     }
@@ -159,26 +155,16 @@ class BookingController extends Controller
         ]);
 
         $ledgerstatement = LedgerStatement::latest()->first('amount');
-<<<<<<< HEAD
         $available_amount = $ledgerstatement->amount ?? 0;
 
         LedgerStatement::create([
             'remarks' => "Booking",
             'booking_id' => $booking->id,
-=======
-
-        LedgerStatement::create([
-            'remarks' => "Booking",
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
             'credit' => $request->paid_amount,
             'debit' => 0,
             'mobile' => $request->mobile,
             'payment_mode' => $request->payment_method,
-<<<<<<< HEAD
             'amount' => $available_amount + $request->paid_amount,
-=======
-            'amount' => $ledgerstatement->amount ?? 0 + $request->paid_amount,
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
         ]);
 
         $carts = Cart::where('cartId', Cookie::get('cartId'))->get();
@@ -238,8 +224,6 @@ class BookingController extends Controller
             $booking = Booking::find($id)->only('total_price', 'after_discount', 'original_amount', 'paid_amount', 'still_dues');
             return response($booking);
         }
-
-
     }
 
     /**
@@ -281,21 +265,14 @@ class BookingController extends Controller
         ]);
 
         $ledgerstatement = LedgerStatement::latest()->first('amount');
-<<<<<<< HEAD
         $available_amount = $ledgerstatement->amount ?? 0;
-=======
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
 
         LedgerStatement::create([
             'remarks' => "Booking",
             'credit' => $request->paid_amount,
             'debit' => 0,
             'payment_mode' => $request->payment_method,
-<<<<<<< HEAD
             'amount' => $available_amount + $request->paid_amount,
-=======
-            'amount' => $ledgerstatement->amount + $request->paid_amount,
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
         ]);
 
         $carts = Cart::where('cartId', Cookie::get('cartId'))->get();

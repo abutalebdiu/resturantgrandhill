@@ -2,17 +2,15 @@
 @section('title','Booking Report')
 
 @push('css')
-    <style>
-        .dropdown-menu {
-            min-width: 6rem;
-        }
-<<<<<<< HEAD
-        .table thead tr th {
-            /* font-size: 13px; */
-        }
-=======
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
-    </style>
+<style>
+    .dropdown-menu {
+        min-width: 6rem;
+    }
+
+    .table thead tr th {
+        /* font-size: 13px; */
+    }
+</style>
 @endpush
 
 @section('content')
@@ -35,7 +33,7 @@
                         </div>
                     </div>
                     <input type="hidden" value="{{ request('type') }}" name="type">
-					<div class="col-3">
+                    <div class="col-3">
                         <div class="form-group">
                             <label>To Date</label>
                             <input type="date" name="to_date" value="{{ request('to_date') }}" class="form-control to_date" required>
@@ -60,9 +58,9 @@
             </form>
 
             @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div>{{$error}}</div>
-                @endforeach
+            @foreach ($errors->all() as $error)
+            <div>{{$error}}</div>
+            @endforeach
             @endif
 
             <table class="table">
@@ -71,17 +69,11 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Mobile</th>
-<<<<<<< HEAD
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Room No</th>
                         <th>Paid Amount</th>
                         {{-- <th>Total Amount</th> --}}
-=======
-                        <th>CheckIn</th>
-                        <th>CheckOut</th>
-                        <th>Total Amount</th>
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
                         <th>Payment Status</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -89,60 +81,56 @@
                 </thead>
                 <tbody class="tbody">
                     @foreach ($bookings as $booking)
-                        <tr>
-                            <td>{{ $booking->id }}</td>
-                            <td>{{ $booking->billinginfo->name }}</td>
-                            <td>{{ $booking->billinginfo->mobile }}</td>
-                            <td>{{ Carbon\Carbon::parse($booking->checkin)->format('d M y') }}</td>
-                            <td>{{ Carbon\Carbon::parse($booking->checkout)->format('d M y') }}</td>
-<<<<<<< HEAD
-                            <td>
-                                @foreach ($booking->bookingDetail as $detail)
-                                    {{ $detail->room->room_no }}{{ $loop->last ? "":',' }}
-                                @endforeach
-                            </td>
-                            <td>৳ {{ $booking->paid_amount }}</td>
-                            {{-- <td>৳ {{ $booking->original_amount }}</td> --}}
-=======
-                            <td>৳ {{ $booking->original_amount }}</td>
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
-                            <td>
-                                <div style="cursor: pointer" class="badge {{ $booking->still_dues > 0 ? 'badge-danger':'badge-primary' }}">
-                                    @if ($booking->still_dues > 0)
-                                        <span onclick="addPayment({{ $booking->id }})">Due</span>
-                                    @else
-                                        Paid
-                                    @endif
-                                </div>
-                            </td>
-                            <td>
-                                @if ($booking->booking_type == 'booking')
-                                <div class="badge badge-warning">
-                                    Booking
-                                </div>
-                                @elseif ($booking->booking_type == 'rent')
-                                <div class="badge badge-green">
-                                    Rent
-                                </div>
-                                @elseif ($booking->booking_type == 'cancle')
-                                <div class="badge badge-danger">
-                                    Cancle
-                                </div>
+                    <tr>
+                        <td>{{ $booking->id }}</td>
+                        <td>{{ $booking->billinginfo->name }}</td>
+                        <td>{{ $booking->billinginfo->mobile }}</td>
+                        <td>{{ Carbon\Carbon::parse($booking->checkin)->format('d M y') }}</td>
+                        <td>{{ Carbon\Carbon::parse($booking->checkout)->format('d M y') }}</td>
+                        <td>
+                            @foreach ($booking->bookingDetail as $detail)
+                            {{ $detail->room->room_no }}{{ $loop->last ? "":',' }}
+                            @endforeach
+                        </td>
+                        <td>৳ {{ $booking->paid_amount }}</td>
+                        {{-- <td>৳ {{ $booking->original_amount }}</td> --}}
+                        <td>
+                            <div style="cursor: pointer" class="badge {{ $booking->still_dues > 0 ? 'badge-danger':'badge-primary' }}">
+                                @if ($booking->still_dues > 0)
+                                <span onclick="addPayment({{ $booking->id }})">Due</span>
+                                @else
+                                Paid
                                 @endif
-                            </td>
+                            </div>
+                        </td>
+                        <td>
+                            @if ($booking->booking_type == 'booking')
+                            <div class="badge badge-warning">
+                                Booking
+                            </div>
+                            @elseif ($booking->booking_type == 'rent')
+                            <div class="badge badge-green">
+                                Rent
+                            </div>
+                            @elseif ($booking->booking_type == 'cancle')
+                            <div class="badge badge-danger">
+                                Cancle
+                            </div>
+                            @endif
+                        </td>
 
-                            <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                        <a style="cursor: pointer" target="_blank" href="{{ route('admin.print.show', $booking->id) }}" class="nav-link text-dark">Print</a>
-                                        <a style="cursor: pointer" target="_blank" href="{{ route('admin.booking.show', $booking->id) }}" class="nav-link text-dark">Details</a>
-                                      </ul>
-                                  </div>
-                            </td>
-                        </tr>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                    <a style="cursor: pointer" target="_blank" href="{{ route('admin.print.show', $booking->id) }}" class="nav-link text-dark">Print</a>
+                                    <a style="cursor: pointer" target="_blank" href="{{ route('admin.booking.show', $booking->id) }}" class="nav-link text-dark">Details</a>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -156,54 +144,44 @@
 
 @push('js')
 
-    <script>
-        $('.from_date').on('change', function() {
-            var from_date = $('.from_date').val();
-            $(".to_date").attr("min", from_date);
-        })
+<script>
+    $('.from_date').on('change', function() {
+        var from_date = $('.from_date').val();
+        $(".to_date").attr("min", from_date);
+    })
 
-        $('#search_number').on('keydown', function() {
-            var number = $('#search_number').val();
-            $('.tbody').empty();
+    $('#search_number').on('keydown', function() {
+        var number = $('#search_number').val();
+        $('.tbody').empty();
 
-            $.ajax({
-                url: `{!! route('admin.reports.index') !!}`,
-                data: {
-                    type: 'booking',
-                    number: number,
-                },
-                success: function(res) {
-                    console.log(res)
-                    $.each( res, function( key, item ) {
-                        $('.tbody').append(
-                            `
+        $.ajax({
+            url: `{!! route('admin.reports.index') !!}`,
+            data: {
+                type: 'booking',
+                number: number,
+            },
+            success: function(res) {
+                console.log(res)
+                $.each(res, function(key, item) {
+                    $('.tbody').append(
+                        `
                             <tr>
                                 <td>${item.id}</td>
                                 <td>${item.billinginfo.name}</td>
                                 <td>${item.billinginfo.mobile}</td>
                                 <td>${item.checkin}</td>
                                 <td>${item.checkout}</td>
-<<<<<<< HEAD
                                 <td></td>
                                 <td>৳ ${item.paid_amount}</td>
-=======
-                                <td>৳ ${item.original_amount}</td>
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
                                 <td>
                                     <div style="cursor: pointer" class="badge ${item.still_dues > 0 ? 'badge-danger':'badge-primary'}">
                                         ${item.still_dues > 0 ? `<span onclick="addPayment(${item.id})">Due</span>`:`Paid` }
                                     </div>
                                 </td>
                                 <td>
-<<<<<<< HEAD
                                     ${item.booking_type == 'booking' ? `<div class="badge badge-warning">Booking</div>`:`` }
                                     ${item.booking_type == 'rent' ? `<div class="badge badge-green">Rent</div>`:`` }
                                     ${item.booking_type == 'cancle' ? `<div class="badge badge-danger">Cancle</div>`:`` }
-=======
-                                    ${item.booking_type == 'booking' 0 ? `<div class="badge badge-warning">Booking</div>`:`` }
-                                    ${item.booking_type == 'rent' 0 ? `<div class="badge badge-green">Rent</div>`:`` }
-                                    ${item.booking_type == 'cancle' 0 ? `<div class="badge badge-danger">Cancle</div>`:`` }
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
                                 </td>
 
                                 <td>
@@ -219,15 +197,15 @@
                                 </td>
                             </tr>
                             `
-                        )
-                    });
-                },
-                error: function(e) {
-                    console.log(e);
-                    // toastr.error('These credentials do not match our records.')
-                }
-            });
-        })
-    </script>
-    @include('backend.includes.validation')
+                    )
+                });
+            },
+            error: function(e) {
+                console.log(e);
+                // toastr.error('These credentials do not match our records.')
+            }
+        });
+    })
+</script>
+@include('backend.includes.validation')
 @endpush

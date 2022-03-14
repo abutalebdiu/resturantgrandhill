@@ -99,22 +99,31 @@ Route::group(['namespace' => 'Frontend'], function () {
 
 /*Start for Backend Admin*/
 
-Route::group(['namespace' => 'Admin'], function () {
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
 
     Route::get('admin-dashboard', 'DashboardController@index')->name('admin.dashboard');
     Route::resource('admin-blog', 'BlogController');
     Route::resource('blog-category', 'BlogCategoryController');
     Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+        
+        Route::resource('role', 'RoleController');
         Route::resource('gallery', 'GalleryController');
         Route::resource('room', 'RoomController');
         Route::resource('category', 'CategoryController');
         Route::resource('roomfloors', 'RoomFloorController');
         Route::resource('booking', 'BookingController');
+        //room + food invoice
+        Route::get('userinvoice/{id}', 'BookingController@finalInvoice')->name('final.invoice');
         Route::resource('food-category', 'FoodCategoryController');
         Route::resource('food', 'FoodController');
         Route::resource('foodorder', 'FoodOrderController');
+        //Pay Food Order Bill
+        Route::get('payfoodbill/{id}', 'FoodOrderController@payfoodbill')->name('payfoodbill');
+        Route::post('payfoodbill/{id}', 'FoodOrderController@foodbillstore')->name('foodbillstore');
+        Route::post('foodorder-adduser', 'FoodOrderController@addUser')->name('foodorder.adduser');
+        Route::get('/foodorder-invoice/{id}', 'FoodOrderController@invoive')->name('foodorder.invoice');
         //Get Food Price
-        Route::post('/food-price', 'FoodOrderController@getPrice')->name('food.price');
+        Route::get('/food-details', 'FoodOrderController@getFoodDetails')->name('food.details');
         Route::post('/add-to-cart', 'FoodOrderController@addCart')->name('food.cart');
         Route::get('/delete-cart/{id}', 'FoodOrderController@delCart')->name('delete.cart');
         Route::get('/increment-qty/{id}', 'FoodOrderController@incrementCart')->name('increment.cart');
@@ -166,6 +175,7 @@ Route::group(['namespace' => 'Admin'], function () {
 
     Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
         Route::get('/admin', 'UserController@admin')->name('admin');
+        Route::post('/update-role', 'UserController@updateRole')->name('updaterole');
         Route::get('/create', 'UserController@adminCreate')->name('create');
         Route::post('/create/post', 'UserController@adminCreatePost')->name('create.post');
         Route::get('/delete/{id}', 'UserController@adminDelete')->name('delete');

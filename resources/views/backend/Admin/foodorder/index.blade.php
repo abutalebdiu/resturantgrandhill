@@ -25,6 +25,7 @@
                          <th>Vat</th>
                          <th>Total</th>
                          <th>Status</th>
+                         <th>Payment</th>
                          <th>Action</th>
 
                      </tr>
@@ -44,12 +45,14 @@
                          <td>{{ $order->vat }}</td>
                          <td>{{ $order->total }}</td>
                          <td>{{$order->status == 1 ? 'prending' : 'Compleated'}}</td>
-                         <td><a class="btn btn-primary btn-sm" href="{{ route('admin.foodorder.edit',$order->id) }}">Edit</a>
+                         <td>@if($order->payment_status == "unpaid") <a class="btn btn-info btn-sm" href="{{route('admin.payfoodbill', $order->id)}}">Pay Now</a> @else <span class="badge badge-success">Paid</span> @endif</td>
+                         <td><a class="btn btn-primary btn-sm" href="{{ route('admin.foodorder.show',$order->id) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                             <a class="btn btn-primary btn-sm" href="{{ route('admin.foodorder.invoice',$order->id) }}"><i class="fa fa-file-text" aria-hidden="true"></i></a>
 
                              <form action="{{ route('admin.foodorder.destroy',$order->id) }}" method="post" style="display:inline-block;">
                                  @csrf
                                  @method('delete')
-                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button>
                              </form>
                          </td>
                      </tr>

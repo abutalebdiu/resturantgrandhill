@@ -25,6 +25,37 @@
             <div>{{$error}}</div>
             @endforeach
             @endif
+            <!-- User Modal -->
+            <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{{route('admin.foodorder.adduser')}}" method="post">
+                            @csrf
+
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="name"><strong>Name <sup class="text-danger">*</sup></strong></label>
+                                    <input type="text" id="name" name="name" placeholder="Name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email"><strong>Email <sup class="text-danger">*</sup> </strong></label>
+                                    <input type="email" id="email" name="email" placeholder="Email" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add User</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <form action="{{ route('admin.foodorder.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -51,7 +82,8 @@
                                         <div class="row">
                                             @foreach($foods as $food)
                                             <div class="col-4">
-                                                <div class="card" data-toggle="modal" data-target="#a{{$food->id}}">
+                                                <div class="card" id="cardImg" data-toggle="modal" data-target="#dd{{$food->id}}">
+                                                    <input type="hidden" id="cardfoodid" value="{{$food->id}}">
                                                     <img height="70px" src="{{asset(''.$food->image)}}" class="card-img-top" alt="...">
                                                     <div class="card-body p-1">
                                                         <p style="font-size:12px" class="card-title text-center">{{$food->name}}</p>
@@ -60,7 +92,8 @@
                                             </div>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="a{{$food->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="dd{{$food->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <input type="hidden" id="foodid" value="{{ $food->id}}">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -99,7 +132,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             @endforeach
                                         </div>
                                     </div>
@@ -107,12 +139,12 @@
                                     $datas = explode(',', $ids);
                                     $datas = array_slice($datas, 1);
                                     @endphp
-                                    @foreach($datas as $data)
+                                    @foreach($datas as $key => $data)
                                     <div class="tab-pane fade show" id="i{{$data}}" role="tabpanel" aria-labelledby="list-home-list">
                                         <div class="row">
                                             @foreach(App\Models\Food::foodByCatId($data) as $food)
                                             <div class="col-4">
-                                                <div class="card" data-toggle="modal" data-target="#a{{$food->id}}{{$loop->index}}">
+                                                <div class="card" data-toggle="modal" data-target="#a{{$key}}{{$food->id}}{{$loop->index}}">
                                                     <img height="70px" src="{{asset(''.$food->image)}}" class="card-img-top" alt="...">
                                                     <div class="card-body p-1">
                                                         <p style="font-size:12px" class="card-title text-center">{{$food->name}}</p>
@@ -121,7 +153,9 @@
                                             </div>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="a{{$food->id}}{{$loop->index}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="a{{$key}}{{$food->id}}{{$loop->index}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <input type="hidden" id="foodid" value="{{ $food->id}}">
+
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -132,7 +166,6 @@
                                                         </div>
                                                         <form>
                                                             <input type="hidden" name="_token" id="carttoken" value="{{ Session::token() }}" />
-                                                            <input type="hidden" id="foodid" value="{{ $food->id}}">
                                                             <div class="modal-body">
                                                                 <table class="table table-bordered">
                                                                     <thead>
@@ -174,6 +207,27 @@
                         <div class="row pb-3 mb-3" style="border-bottom:2px dashed #ddd;">
                             <div class="col-6">
                                 <div class="form-group">
+                                    <label> <strong> User</strong></label>
+                                    <div class="row">
+                                        <select name="user_id" id="user_id" class="form-control col-7 pl-2">
+                                            @foreach($users as $user)
+                                            <option value="{{$user->id}}">{{$user->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="col-5">
+                                            <button type="button" class="btn btn-sm btn-primary py-2" data-toggle="modal" data-target="#addUser">Add User</button>
+                                        </div>
+                                    </div>
+
+                                    <small class="form-text text-danger">{{ $errors->first('user_id') }}</small>
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- <div class="col-6">
+                                <div class="form-group">
                                     <label> <strong> Customer Name</strong></label>
                                     <input type="text" name="customer_name" value="{{old('customer_name')}}" class="form-control" placeholder="Customer name">
                                     <small class="form-text text-danger">{{ $errors->first('customer_name') }}</small>
@@ -192,7 +246,7 @@
                                     <input type="text" name="address" value="{{old('address')}}" class="form-control" placeholder="Customer Address">
                                     <small class="form-text text-danger">{{ $errors->first('address') }}</small>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-6">
                                 <div class="form-group">
                                     <label><strong>Table No</strong></label>
@@ -272,11 +326,27 @@
 @push('js')
 <script type="text/javascript">
     $(document).ready(function() {
+        // $("#cardImg").click(function() {
+        //     $cardfoodid = $("cardfoodid").val();
+        //     $.ajax({
+        //         url: "{{route('admin.food.cart')}}",
+        //         type: 'POST',
+        //         data: {
+        //             foodid: foodid,
+        //             qty: qty,
+        //             _token: carttoken,
+        //         },
+        //         success: function(res) {
+        //             location.reload();
+        //         }
+        //     })
+        // });
+
+
         $('.addToCart').click(function() {
-            console.log('ajdsl');
+            var foodid = $('.show > #foodid').val();
             var carttoken = $("#carttoken").val();
             var qty = $("#qty").val();
-            var foodid = $("#foodid").val();
             $.ajax({
                 url: "{{route('admin.food.cart')}}",
                 type: 'POST',
@@ -292,84 +362,8 @@
         });
 
 
-        $('#food_quantity').select2({
-            theme: 'classic',
-            width: 'resolve',
-        }).on('change', function() {
-            console.log('here');
-        });
-
-
-
-        $('#food_id').select2({
-            theme: 'classic',
-            width: 'resolve',
-        }).on('change', function() {
-            let id = $('#food_id').val();
-            let token = $('#token').val();
-
-            $.ajax({
-                url: "{{route('admin.food.price')}}",
-                type: 'POST',
-                data: {
-                    id: id,
-                    _token: token,
-                },
-                success: function(res) {
-                    $('#subtotal').val(res);
-                }
-            })
-        });
-        $("#total").click(function() {
-            let subtotal = parseInt($("#subtotal").val());
-            let charge = parseInt($("#servicecharge").val());
-            let vat = parseInt($("#vat").val());
-            let total = subtotal + charge + vat;
-            $("#total").val(total);
-        })
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // add row
-    // $('.food_id').change(function() {
-    //     var arr = $('select[name=food_id]').val();
-    //     console.log(arr)
-    // });
-    // $("#addRow").click(function() {
-    //     var html = '';
-    //     html += '<div id="inputFormRow">';
-    //     html += '<div class="input-group mb-3">';
-    //     html += '<select name="food_id[]" id="food_id" class="food_id form-control  m-input">';
-    //     html += '@foreach($foods as $food)';
-    //     html += '<option value="{{$food->id}}">{{$food->name}}</option>';
-    //     html += '@endforeach';
-    //     html += '</select>';
-    //     html += '<div class="input-group-append">';
-    //     html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
-    //     html += '</div>';
-    //     html += '</div>';
-
-    //     $('#newRow').append(html);
-    // });
-
-    // remove row
-    // $(document).on('click', '#removeRow', function() {
-    //     $(this).closest('#inputFormRow').remove();
-    // });
 </script>
 @endpush
 @endsection

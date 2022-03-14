@@ -2,11 +2,11 @@
 @section('title','Expenses')
 
 @push('css')
-    <style>
-        .dropdown-menu {
-            min-width: 6rem;
-        }
-    </style>
+<style>
+    .dropdown-menu {
+        min-width: 6rem;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -17,7 +17,6 @@
             <h3 class="panel-title">Expense List</h3>
         </div>
         <div class="panel-body">
-<<<<<<< HEAD
 
             <form action="{{ route('admin.reports.index') }}" class="needs-validation" novalidate>
                 <div class="row">
@@ -31,7 +30,7 @@
                         </div>
                     </div>
                     <input type="hidden" value="{{ request('type') }}" name="type">
-					<div class="col-3">
+                    <div class="col-3">
                         <div class="form-group">
                             <label>To Date</label>
                             <input type="date" name="to_date" value="{{ request('to_date') }}" class="form-control to_date" required>
@@ -55,49 +54,31 @@
                 </div>
             </form>
 
-=======
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
             <table class="table">
                 <thead>
                     <tr>
                         <th>SL</th>
                         <th>Date Time</th>
                         <th>Ref. Name</th>
-<<<<<<< HEAD
                         <th>Purpose</th>
                         <th>Remarks</th>
                         <th>Amount</th>
-=======
-                        <th>Amount</th>
-                        <th>Purpose</th>
-                        <th>Remarks</th>
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
                         <th>Entry By</th>
                         <th>Update By</th>
                     </tr>
                 </thead>
-<<<<<<< HEAD
                 <tbody class="tbody">
-=======
-                <tbody>
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
                     @foreach ($expenses as $expense)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ Carbon\Carbon::parse($expense->date)->format('d M y - h:i A') }}</td>
-                            <td>{{ $expense->reference }}</td>
-<<<<<<< HEAD
-                            <td>{{ $expense->purpose }}</td>
-                            <td>{{ $expense->remarks }}</td>
-                            <td>{{ $expense->amount }}</td>
-=======
-                            <td>{{ $expense->amount }}</td>
-                            <td>{{ $expense->purpose }}</td>
-                            <td>{{ $expense->remarks }}</td>
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
-                            <td>{{ $expense->entry_by }}</td>
-                            <td>{{ $expense->update_by ?? 'N/A' }}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ Carbon\Carbon::parse($expense->date)->format('d M y - h:i A') }}</td>
+                        <td>{{ $expense->reference }}</td>
+                        <td>{{ $expense->purpose }}</td>
+                        <td>{{ $expense->remarks }}</td>
+                        <td>{{ $expense->amount }}</td>
+                        <td>{{ $expense->entry_by }}</td>
+                        <td>{{ $expense->update_by ?? 'N/A' }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -106,30 +87,29 @@
 </div>
 
 @endsection
-<<<<<<< HEAD
 
 @push('js')
 
-    <script>
-        $('.from_date').on('change', function() {
-            var from_date = $('.from_date').val();
-            $(".to_date").attr("min", from_date);
-        })
+<script>
+    $('.from_date').on('change', function() {
+        var from_date = $('.from_date').val();
+        $(".to_date").attr("min", from_date);
+    })
 
-        $('#search_number').on('keydown', function() {
-            var search = $('#search_number').val();
-            $('.tbody').empty();
+    $('#search_number').on('keydown', function() {
+        var search = $('#search_number').val();
+        $('.tbody').empty();
 
-            $.ajax({
-                url: `{!! route('admin.reports.index') !!}`,
-                data: {
-                    type: 'expenses',
-                    search: search,
-                },
-                success: function(res) {
-                    $.each( res, function( key, item ) {
-                        $('.tbody').append(
-                            `
+        $.ajax({
+            url: `{!! route('admin.reports.index') !!}`,
+            data: {
+                type: 'expenses',
+                search: search,
+            },
+            success: function(res) {
+                $.each(res, function(key, item) {
+                    $('.tbody').append(
+                        `
                             <tr>
                                 <td>${key+1}</td>
                                 <td>${item.date}</td>
@@ -141,17 +121,15 @@
                                 <td>${item.update_by ?? 'N/A'}</td>
                             </tr>
                             `
-                        )
-                    });
-                },
-                error: function(e) {
-                    console.log(e);
-                    // toastr.error('These credentials do not match our records.')
-                }
-            });
-        })
-    </script>
-    @include('backend.includes.validation')
+                    )
+                });
+            },
+            error: function(e) {
+                console.log(e);
+                // toastr.error('These credentials do not match our records.')
+            }
+        });
+    })
+</script>
+@include('backend.includes.validation')
 @endpush
-=======
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c

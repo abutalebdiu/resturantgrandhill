@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Billing;
 use App\Models\Booking;
 use App\Models\Expense;
+use App\Models\FoodOrder;
 use App\Models\FundWithdraw;
 use Illuminate\Http\Request;
 use App\Models\LedgerStatement;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
@@ -19,6 +22,9 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
+        if (!Gate::allows('manager', Auth::user()->role_id)) {
+            abort(403);
+        }
         if ($request->ajax()) {
             if ($request->type == 'clientlist') {
                 $data = Billing::latest()->where('mobile', 'LIKE', "%{$request->number}%")->orWhere('alternative_mobile', 'LIKE', "%{$request->number}%")->get();
@@ -26,15 +32,16 @@ class ReportController extends Controller
             } elseif ($request->type == 'booking') {
 
                 $number = $request->number;
-                $data = Booking::when('billinginfo', function ($query) use($number) {
-                                return $query->whereHas('billinginfo', function ($q) use($number) {
-                                    return $q->where('mobile', 'LIKE', "%{$number}%");
-                                });
-                            }
-                        )
-                        ->get();
+                $data = Booking::when(
+                    'billinginfo',
+                    function ($query) use ($number) {
+                        return $query->whereHas('billinginfo', function ($q) use ($number) {
+                            return $q->where('mobile', 'LIKE', "%{$number}%");
+                        });
+                    }
+                )
+                    ->get();
                 return response($data);
-<<<<<<< HEAD
             } elseif ($request->type == 'expenses') {
                 $data = Expense::latest()->where('reference', 'LIKE', "%{$request->search}%")->get();
                 return response($data);
@@ -44,8 +51,6 @@ class ReportController extends Controller
             } elseif ($request->type == 'fundwithdrawal') {
                 $data = FundWithdraw::latest()->where('remarks', 'LIKE', "%{$request->search}%")->get();
                 return response($data);
-=======
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
             }
         }
 
@@ -56,9 +61,7 @@ class ReportController extends Controller
                 $data['bookings'] = Booking::latest()->get();
             }
             return view('backend.Admin.reports.booking', $data);
-
         } elseif ($request->type == 'expenses') {
-<<<<<<< HEAD
             if ($request->from_date && $request->to_date) {
                 $data['expenses'] = Expense::latest()->whereBetween('date', [$request->from_date, $request->to_date])->get();
             } else {
@@ -66,22 +69,13 @@ class ReportController extends Controller
             }
 
             return view('backend.Admin.reports.expenses', $data);
-
         } elseif ($request->type == 'fundwithdrawal') {
             if ($request->from_date && $request->to_date) {
                 $data['funds'] = FundWithdraw::latest()->whereBetween('created_at', [$request->from_date, $request->to_date])->get();
             } else {
                 $data['funds'] = FundWithdraw::latest()->get();
             }
-=======
-            $data['expenses'] = Expense::latest()->get();
-            return view('backend.Admin.reports.expenses', $data);
-
-        } elseif ($request->type == 'fundwithdrawal') {
-            $data['funds'] = FundWithdraw::latest()->get();
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
             return view('backend.Admin.reports.withdrawal', $data);
-
         } elseif ($request->type == 'clientlist') {
             if ($request->from_date && $request->to_date) {
                 $data['billings'] = Billing::latest()->whereBetween('created_at', [$request->from_date, $request->to_date])->get();
@@ -89,23 +83,22 @@ class ReportController extends Controller
                 $data['billings'] = Billing::latest()->get();
             }
             return view('backend.Admin.reports.clientlist', $data);
-
         } elseif ($request->type == 'ledgerstatement') {
-<<<<<<< HEAD
             if ($request->from_date && $request->to_date) {
                 $data['ledgerstatements'] = LedgerStatement::latest()->whereBetween('created_at', [$request->from_date, $request->to_date])->get();
             } else {
                 $data['ledgerstatements'] = LedgerStatement::with('bookings')->latest()->get();
             }
             return view('backend.Admin.reports.ledgerstatement', $data);
+        } elseif ($request->type == 'foodreport') {
+            if ($request->from_date && $request->to_date) {
+                $data['foodorders'] = FoodOrder::latest()->whereBetween('created_at', [$request->from_date, $request->to_date])->get();
+            } else {
+                $data['foodorders'] = FoodOrder::with('user')->latest()->get();
+            }
+            return view('backend.Admin.reports.foodreport', $data);
         } else {
             return back();
-=======
-            $data['ledgerstatements'] = LedgerStatement::latest()->get();
-            return view('backend.Admin.reports.ledgerstatement', $data);
-        } else {
-            return "None";
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
         }
     }
 

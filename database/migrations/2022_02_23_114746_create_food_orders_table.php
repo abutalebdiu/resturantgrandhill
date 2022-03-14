@@ -15,7 +15,8 @@ class CreateFoodOrdersTable extends Migration
     {
         Schema::create('food_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('customer_name');
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('customer_name')->nullable();
             $table->string('mobile')->nullable();
             $table->text('address')->nullable();
             $table->integer('table_no');
@@ -23,6 +24,7 @@ class CreateFoodOrdersTable extends Migration
             $table->integer('service_charge')->nullable();
             $table->integer('vat')->nullable();
             $table->integer('total')->nullable();
+            $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid');
             $table->enum('status', ['1', '2'])->default('1');
             $table->timestamps();
         });

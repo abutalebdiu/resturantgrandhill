@@ -139,11 +139,14 @@
                     <li>
                         <a href="{{ route('admin.contact.index') }}"> <i class="fa fa-shopping-cart"></i><span>Contact</span> </a>
                     </li>
-
-                    <li>
-                        <a href="{{ route('admin.admin') }}"> <i class="fa fa-list text-theme"></i><span>Users Management</span> </a>
+                    <li class="has-sub">
+                        <a href="javascript:;"> <b class="caret"></b> <i class="fa fa-cogs"></i> <span> Users Management </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="{{ route('admin.admin') }}"> Users <i class="fa fa-cogs text-theme"></i> </a></li>
+                            <li><a href="{{route('admin.role.index')}}"> Role <i class="fa fa-cogs text-theme"></i> </a></li>
+                        </ul>
                     </li>
-
 
 
 
@@ -167,6 +170,7 @@
                             <li><a href="{{ route('admin.reports.index', ['type' => 'expenses']) }}"> Expense Report <i class="fa fa-cogs text-theme"></i> </a></li>
                             <li><a href="{{ route('admin.reports.index', ['type' => 'fundwithdrawal']) }}"> Fund Withdrawal <i class="fa fa-cogs text-theme"></i> </a></li>
                             <li><a href="{{ route('admin.reports.index', ['type' => 'ledgerstatement']) }}"> Ledger Statement <i class="fa fa-cogs text-theme"></i> </a></li>
+                            <li><a href="{{ route('admin.reports.index', ['type' => 'foodreport']) }}"> Food Report <i class="fa fa-cogs text-theme"></i> </a></li>
                             <li><a href="{{ route('admin.reports.index', ['type' => 'clientlist']) }}"> Client List <i class="fa fa-cogs text-theme"></i> </a></li>
                         </ul>
                     </li>
