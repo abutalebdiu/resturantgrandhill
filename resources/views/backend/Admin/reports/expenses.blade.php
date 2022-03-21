@@ -53,35 +53,36 @@
                     </div>
                 </div>
             </form>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>SL</th>
-                        <th>Date Time</th>
-                        <th>Ref. Name</th>
-                        <th>Purpose</th>
-                        <th>Remarks</th>
-                        <th>Amount</th>
-                        <th>Entry By</th>
-                        <th>Update By</th>
-                    </tr>
-                </thead>
-                <tbody class="tbody">
-                    @foreach ($expenses as $expense)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($expense->date)->format('d M y - h:i A') }}</td>
-                        <td>{{ $expense->reference }}</td>
-                        <td>{{ $expense->purpose }}</td>
-                        <td>{{ $expense->remarks }}</td>
-                        <td>{{ $expense->amount }}</td>
-                        <td>{{ $expense->entry_by }}</td>
-                        <td>{{ $expense->update_by ?? 'N/A' }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Date Time</th>
+                            <th>Ref. Name</th>
+                            <th>Purpose</th>
+                            <th>Remarks</th>
+                            <th>Amount</th>
+                            <th>Entry By</th>
+                            <th>Update By</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        @foreach ($expenses as $expense)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ Carbon\Carbon::parse($expense->date)->format('d M y - h:i A') }}</td>
+                            <td>{{ $expense->reference }}</td>
+                            <td>{{ $expense->purpose }}</td>
+                            <td>{{ $expense->remarks }}</td>
+                            <td>{{ $expense->amount }}</td>
+                            <td>{{ $expense->entry_by }}</td>
+                            <td>{{ $expense->update_by ?? 'N/A' }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

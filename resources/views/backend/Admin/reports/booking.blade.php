@@ -62,78 +62,79 @@
             <div>{{$error}}</div>
             @endforeach
             @endif
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Mobile</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                        <th>Room No</th>
-                        <th>Paid Amount</th>
-                        {{-- <th>Total Amount</th> --}}
-                        <th>Payment Status</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody class="tbody">
-                    @foreach ($bookings as $booking)
-                    <tr>
-                        <td>{{ $booking->id }}</td>
-                        <td>{{ $booking->billinginfo->name }}</td>
-                        <td>{{ $booking->billinginfo->mobile }}</td>
-                        <td>{{ Carbon\Carbon::parse($booking->checkin)->format('d M y') }}</td>
-                        <td>{{ Carbon\Carbon::parse($booking->checkout)->format('d M y') }}</td>
-                        <td>
-                            @foreach ($booking->bookingDetail as $detail)
-                            {{ $detail->room->room_no }}{{ $loop->last ? "":',' }}
-                            @endforeach
-                        </td>
-                        <td>৳ {{ $booking->paid_amount }}</td>
-                        {{-- <td>৳ {{ $booking->original_amount }}</td> --}}
-                        <td>
-                            <div style="cursor: pointer" class="badge {{ $booking->still_dues > 0 ? 'badge-danger':'badge-primary' }}">
-                                @if ($booking->still_dues > 0)
-                                <span onclick="addPayment({{ $booking->id }})">Due</span>
-                                @else
-                                Paid
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Room No</th>
+                            <th>Paid Amount</th>
+                            {{-- <th>Total Amount</th> --}}
+                            <th>Payment Status</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        @foreach ($bookings as $booking)
+                        <tr>
+                            <td>{{ $booking->id }}</td>
+                            <td>{{ $booking->billinginfo->name }}</td>
+                            <td>{{ $booking->billinginfo->mobile }}</td>
+                            <td>{{ Carbon\Carbon::parse($booking->checkin)->format('d M y') }}</td>
+                            <td>{{ Carbon\Carbon::parse($booking->checkout)->format('d M y') }}</td>
+                            <td>
+                                @foreach ($booking->bookingDetail as $detail)
+                                {{ $detail->room->room_no }}{{ $loop->last ? "":',' }}
+                                @endforeach
+                            </td>
+                            <td>৳ {{ $booking->paid_amount }}</td>
+                            {{-- <td>৳ {{ $booking->original_amount }}</td> --}}
+                            <td>
+                                <div style="cursor: pointer" class="badge {{ $booking->still_dues > 0 ? 'badge-danger':'badge-primary' }}">
+                                    @if ($booking->still_dues > 0)
+                                    <span onclick="addPayment({{ $booking->id }})">Due</span>
+                                    @else
+                                    Paid
+                                    @endif
+                                </div>
+                            </td>
+                            <td>
+                                @if ($booking->booking_type == 'booking')
+                                <div class="badge badge-warning">
+                                    Booking
+                                </div>
+                                @elseif ($booking->booking_type == 'rent')
+                                <div class="badge badge-green">
+                                    Rent
+                                </div>
+                                @elseif ($booking->booking_type == 'cancle')
+                                <div class="badge badge-danger">
+                                    Cancle
+                                </div>
                                 @endif
-                            </div>
-                        </td>
-                        <td>
-                            @if ($booking->booking_type == 'booking')
-                            <div class="badge badge-warning">
-                                Booking
-                            </div>
-                            @elseif ($booking->booking_type == 'rent')
-                            <div class="badge badge-green">
-                                Rent
-                            </div>
-                            @elseif ($booking->booking_type == 'cancle')
-                            <div class="badge badge-danger">
-                                Cancle
-                            </div>
-                            @endif
-                        </td>
+                            </td>
 
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
-                                    <a style="cursor: pointer" target="_blank" href="{{ route('admin.print.show', $booking->id) }}" class="nav-link text-dark">Print</a>
-                                    <a style="cursor: pointer" target="_blank" href="{{ route('admin.booking.show', $booking->id) }}" class="nav-link text-dark">Details</a>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
+                                        <a style="cursor: pointer" target="_blank" href="{{ route('admin.print.show', $booking->id) }}" class="nav-link text-dark">Print</a>
+                                        <a style="cursor: pointer" target="_blank" href="{{ route('admin.booking.show', $booking->id) }}" class="nav-link text-dark">Details</a>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

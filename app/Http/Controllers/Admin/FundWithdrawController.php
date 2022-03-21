@@ -14,17 +14,8 @@ class FundWithdrawController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-<<<<<<< HEAD
-    public function index(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = LedgerStatement::get('amount')->last();
-            return response($data);
-        }
-=======
     public function index()
     {
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
         $funds = FundWithdraw::latest()->take(10)->get();
         return view('backend.Admin.funds.index', compact('funds'));
     }
@@ -55,23 +46,12 @@ class FundWithdrawController extends Controller
         ]);
 
         $ledgerstatement = LedgerStatement::latest()->first('amount');
-<<<<<<< HEAD
-        $available_amount = $ledgerstatement->amount ?? 0;
-
-        LedgerStatement::create([
-            'remarks' => $request->remarks,
-            'payment_mode' => $request->payment_mode,
-            'credit' => 0,
-            'debit' => $request->withdraw_amount,
-            'amount' => $available_amount - $request->withdraw_amount,
-=======
 
         LedgerStatement::create([
             'remarks' => $request->remarks,
             'credit' => 0,
             'debit' => $request->amount,
             'amount' => $ledgerstatement->amount - $request->amount,
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
         ]);
 
         FundWithdraw::create($request->all() + [

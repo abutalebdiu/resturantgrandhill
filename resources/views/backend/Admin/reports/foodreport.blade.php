@@ -15,7 +15,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">Food Order Report</h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body table-responsive">
             <table class="table">
 
                 <form action="{{ route('admin.reports.index') }}" class="needs-validation" novalidate>

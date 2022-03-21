@@ -75,7 +75,7 @@
     $(document).ready(function() {
         $('#category').select2({
             theme: 'classic',
-            width: 'resolve',
+            width: '100%',
         }).on('change', function() {});
     });
 </script>

@@ -12,7 +12,7 @@
                 </a>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="panel-body table-responsive">
             <table id="data-table-default" class="table table-striped table-bordered table-td-valign-middle">
                 <tr>
                     <th>Amount</th>

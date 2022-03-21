@@ -59,9 +59,9 @@
             <form action="{{ route('admin.foodorder.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-5 col-sm-4">
                                 <div class="list-group" id="list-tab" role="tablist">
                                     <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">All</a>
                                     @php
@@ -75,13 +75,13 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-7 col-sm-8">
 
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
                                         <div class="row">
                                             @foreach($foods as $food)
-                                            <div class="col-4">
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-2">
                                                 <div class="card" id="cardImg" data-toggle="modal" data-target="#dd{{$food->id}}">
                                                     <input type="hidden" id="cardfoodid" value="{{$food->id}}">
                                                     <img height="70px" src="{{asset(''.$food->image)}}" class="card-img-top" alt="...">
@@ -203,9 +203,9 @@
                         </div>
 
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-sm-4">
                         <div class="row pb-3 mb-3" style="border-bottom:2px dashed #ddd;">
-                            <div class="col-6">
+                            <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     <label> <strong> User</strong></label>
                                     <div class="row">
@@ -247,7 +247,7 @@
                                     <small class="form-text text-danger">{{ $errors->first('address') }}</small>
                                 </div>
                             </div> -->
-                            <div class="col-6">
+                            <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     <label><strong>Table No</strong></label>
                                     <select name="table_no" id="table_no" class="form-control">
@@ -266,30 +266,32 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th class="text-center">Price</th>
-                                            <th class="text-center">Qty</th>
-                                            <th class="text-center">Total</th>
-                                            <th class="text-center" width="10%">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th class="text-center">Price</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">Total</th>
+                                                <th class="text-center" width="10%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                        @foreach(Cart::content() as $item)
-                                        <tr>
-                                            <td>{{$item->name}}</td>
-                                            <td class="text-center">{{$item->price}}</td>
-                                            <td class="text-center"><a href="{{route('admin.increment.cart', $item->rowId)}}"><i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                </a>{{$item->qty}} <a href="{{route('admin.decrement.cart', $item->rowId)}}"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
-                                            <td class="text-center">{{$item->total}}</td>
-                                            <td class="text-center"><a href="{{route('admin.delete.cart', $item->rowId)}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                            @foreach(Cart::content() as $item)
+                                            <tr>
+                                                <td>{{$item->name}}</td>
+                                                <td class="text-center">{{$item->price}}</td>
+                                                <td class="text-center"><a href="{{route('admin.increment.cart', $item->rowId)}}"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </a>{{$item->qty}} <a href="{{route('admin.decrement.cart', $item->rowId)}}"><i class="fa fa-minus-circle" aria-hidden="true"></i></a></td>
+                                                <td class="text-center">{{$item->total}}</td>
+                                                <td class="text-center"><a href="{{route('admin.delete.cart', $item->rowId)}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                         </div>

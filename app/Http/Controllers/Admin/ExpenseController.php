@@ -51,20 +51,13 @@ class ExpenseController extends Controller
         ]);
 
         $ledgerstatement = LedgerStatement::latest()->first('amount');
-<<<<<<< HEAD
         $available_amount = $ledgerstatement->amount ?? 0;
-=======
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
 
         LedgerStatement::create([
             'remarks' => $request->remarks,
             'credit' => 0,
             'debit' => $request->amount,
-<<<<<<< HEAD
-            'amount' => $available_amount - $request->amount,
-=======
             'amount' => $ledgerstatement->amount - $request->amount,
->>>>>>> a0d1559a3a3587d3c7a9f6555c04751aa810f17c
         ]);
 
         $notification = array(

@@ -86,6 +86,7 @@ class ReportController extends Controller
         } elseif ($request->type == 'ledgerstatement') {
             if ($request->from_date && $request->to_date) {
                 $data['ledgerstatements'] = LedgerStatement::latest()->whereBetween('created_at', [$request->from_date, $request->to_date])->get();
+                
             } else {
                 $data['ledgerstatements'] = LedgerStatement::with('bookings')->latest()->get();
             }

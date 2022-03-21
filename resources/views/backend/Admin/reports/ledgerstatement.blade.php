@@ -15,7 +15,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Ledger Statement List</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body table-responsive">
                 <table class="table">
 
                     <form action="{{ route('admin.reports.index') }}" class="needs-validation" novalidate>
@@ -113,44 +113,6 @@
             var from_date = $('.from_date').val();
             $(".to_date").attr("min", from_date);
         })
-
-        // $('#search_number').on('keydown', function() {
-        //     var search = $('#search_number').val();
-        //     $('.tbody').empty();
-
-        //     $.ajax({
-        //         url: `{!! route('admin.reports.index') !!}`,
-        //         data: {
-        //             type: 'ledgerstatement',
-        //             search: search,
-        //         },
-        //         success: function(res) {
-        //             $.each( res, function( key, item ) {
-        //                 $('.tbody').append(
-        //                     <td>{{ $ledgerstatement->amount }}</td>
-        //                     <td>{{ $ledgerstatement->debit }}</td>
-        //                     <td>{{ $ledgerstatement->credit }}</td>
-        //                     `
-        //                     <tr>
-        //                         <td>${key+1}</td>
-        //                         <td>${item.created_at}</td>
-        //                         <td>${item.reference}</td>
-        //                         <td>${item.amount}</td>
-        //                         <td>${item.purpose}</td>
-        //                         <td>${item.remarks}</td>
-        //                         <td>${item.entry_by}</td>
-        //                         <td>${item.update_by ?? 'N/A'}</td>
-        //                     </tr>
-        //                     `
-        //                 )
-        //             });
-        //         },
-        //         error: function(e) {
-        //             console.log(e);
-        //             // toastr.error('These credentials do not match our records.')
-        //         }
-        //     });
-        // })
     </script>
     @include('backend.includes.validation')
     @endpush

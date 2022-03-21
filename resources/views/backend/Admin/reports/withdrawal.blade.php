@@ -52,35 +52,36 @@
                     </div>
                 </div>
             </form>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>SL</th>
-                        <th>Date Time</th>
-                        <th>Remarks</th>
-                        <th>Payment Mode</th>
-                        {{-- <th>Available Amount</th> --}}
-                        <th>Withdraw Amount</th>
-                        <th>Entry By</th>
-                        <th>Update By</th>
-                    </tr>
-                </thead>
-                <tbody class="tbody">
-                    @foreach ($funds as $fund)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ Carbon\Carbon::parse($fund->created_at)->format('d M y - h:m A') }}</td>
-                        <td>{{ $fund->remarks }}</td>
-                        <td>{{ $fund->payment_mode }}</td>
-                        {{-- <td>{{ $fund->available_amount }}</td> --}}
-                        <td>{{ $fund->withdraw_amount }}</td>
-                        <td>{{ $fund->entry_by }}</td>
-                        <td>{{ $fund->update_by ?? 'N/A' }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Date Time</th>
+                            <th>Remarks</th>
+                            <th>Payment Mode</th>
+                            {{-- <th>Available Amount</th> --}}
+                            <th>Withdraw Amount</th>
+                            <th>Entry By</th>
+                            <th>Update By</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        @foreach ($funds as $fund)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ Carbon\Carbon::parse($fund->created_at)->format('d M y - h:m A') }}</td>
+                            <td>{{ $fund->remarks }}</td>
+                            <td>{{ $fund->payment_mode }}</td>
+                            {{-- <td>{{ $fund->available_amount }}</td> --}}
+                            <td>{{ $fund->withdraw_amount }}</td>
+                            <td>{{ $fund->entry_by }}</td>
+                            <td>{{ $fund->update_by ?? 'N/A' }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
